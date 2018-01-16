@@ -73,7 +73,7 @@ class AnnotationRouteDiscovery
         $routes = $this->scanRoutes($namespace, $directory);
 
         if (false === file_put_contents($cachePath, '<?php return '.var_export($routes, true).'; ')) {
-            throw new Exception('Cache directory cannot be written');
+            throw new \RuntimeException('Cache directory can not be writen.');
         }
 
         return $routes;
