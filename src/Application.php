@@ -177,7 +177,13 @@ class Application
         $router = $this->di['router'];
 
         $discovery = new AnnotationRouteDiscovery($router, $this->di['annotations'], $this->biz['cache_directory'], $this->debug);
-        $discovery->discover('Controller', dirname(__DIR__).'/Controller');
+        if (empty($this->config['route_discovery']) || !is_array($this->config['route_discovery'])) {
+            throw new \RuntimeException("`route_discovery`未配置或配置不正确。");
+        }
+
+        foreach ($this->config['route_discovery'] as $namespace => $directory) {
+            $discovery->discover($namespace, $directory);
+        }
 
         $router->handle();
 
