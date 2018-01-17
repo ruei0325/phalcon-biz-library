@@ -171,7 +171,7 @@ class Application
         $this->di['event_dispatcher']->dispatch(WebEvents::REQUEST, $event);
 
         if ($event->hasResponse()) {
-            return $this->filterResponse($event->getResponse(), $request, $type);
+            return $this->filterResponse($event->getResponse(), $request);
         }
 
         $router = $this->di['router'];
