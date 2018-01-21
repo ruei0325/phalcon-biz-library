@@ -27,10 +27,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = 404;
         } elseif ($e instanceof \InvalidArgumentException || $e instanceof ServiceInvalidArgumentException) {
             $error = ['code' => ErrorCode::INVALID_ARGUMENT, 'message' => $e->getMessage()];
-            $statusCode = 422;
+            $statusCode = 400;
         } elseif ($e instanceof ServiceAccessDeniedException) {
             $error = ['code' => ErrorCode::ACCESS_DENIED, 'message' => $e->getMessage() ?: 'Access denied.'];
-            $statusCode = 405;
+            $statusCode = 403;
         } elseif ($e instanceof AuthenticateException) {
             $error = ['code' => $e->getCode() ?: ErrorCode::INVALID_AUTHENTICATION, 'message' => $e->getMessage() ?: 'Invalid authentication.'];
             $statusCode = 401;
