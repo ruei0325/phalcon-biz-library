@@ -10,7 +10,7 @@ namespace Codeages\PhalconBiz;
 class ErrorCode
 {
     /**
-     * 接口、资源不存在 (http code: 404).
+     * 接口、资源不存在 (http code: 404)
      */
     const NOT_FOUND = 1;
 
@@ -19,24 +19,21 @@ class ErrorCode
      * 例如：
      * 1. 请求体非 json 格式
      * 2. 未设置 application/json 头部
-     * 3. 认证签名错误、签名过期
-     * 4. 认证用户不存在
      */
     const BAD_REQUEST = 2;
 
     /**
-     * API请求次数已达上限 (http code: 403)
+     * API请求次数已达上限 (http code: 429)
      */
     const TOO_MANY_CALLS = 3;
 
     /**
-     * 请求验证非法 (http code: 401)
+     * 请求认证非法 (http code: 401)
      *
-     * 1. 验证信息不存在、格式不正确
-     * 2. 验证签名不正确
-     * 3. 验证对应的用户不存在
-     * 4. 验证信息已过期
-     * 5. 被禁止访问
+     * 1. 认证信息格式不正确
+     * 2. 认证签名不正确
+     * 3. 认证对应的用户不存在
+     * 4. 认证信息已过期
      */
     const INVALID_AUTHENTICATION = 4;
 
@@ -50,17 +47,21 @@ class ErrorCode
      *
      * 1. 升级维护中
      * 2. 过载保护中
-     * 3. 内部服务处理超时.
      */
     const SERVICE_UNAVAILABLE = 6;
 
     /**
-     * 权限不足，无权访问 (http code: 405)
+     * 权限不足或帐号被禁用，无权访问 (http code: 403)
      */
     const ACCESS_DENIED = 7;
 
     /**
-     * 参数缺失、参数不正确 (http code: 422)
+     * 参数缺失、参数不正确 (http code: 400)
      */
     const INVALID_ARGUMENT = 8;
+
+    /**
+     * 网关已收到请求，但处理超时，可重试 ( htto code: 504)
+     */
+    const TIMEOUT = 9;
 }
