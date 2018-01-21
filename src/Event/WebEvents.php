@@ -54,4 +54,16 @@ final class WebEvents
      * @var string
      */
     const RESPONSE = 'web.response';
+
+    /**
+     * The FINISH_REQUEST event occurs when a response was generated for a request.
+     *
+     * This event allows you to reset the global and environmental state of
+     * the application, when it was changed during the request.
+     *
+     * @Event("Codeages\PhalconBiz\Event\FinishRequestEvent")
+     *
+     * @var string
+     */
+    const FINISH_REQUEST = 'web.finish_request';
 }
