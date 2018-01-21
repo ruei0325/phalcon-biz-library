@@ -17,7 +17,7 @@ class ErrorCode
     /**
      * 请求报文格式不正确 (http code: 400)
      * 例如：
-     * 1. 请求体非 json 格式
+     * 1. 请求体非 JSON 格式
      * 2. 未设置 application/json 头部
      */
     const BAD_REQUEST = 2;
