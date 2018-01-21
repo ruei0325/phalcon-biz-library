@@ -135,9 +135,29 @@ trait ControllerTrait
         return $type;
     }
 
+    /**
+     * 操作性接口，成功的返回值
+     *
+     * @return array
+     */
     protected function success()
     {
         return ['success' => true];
+    }
+
+    /**
+     * 重定向
+     *
+     * @param [type] $url 重定向的目标 URL
+     * @param integer $statusCode 重定向的 HTTP 状态码，默认为 301
+     * @return Phalcon\Http\ResponseInterface
+     */
+    protected function redirect($url, $statusCode = 301)
+    {
+        $response = $this->di['response'];
+        $response->redirect($url, true, $statusCode);
+
+        return $response;
     }
 
     protected function throwNotFoundException($message)
