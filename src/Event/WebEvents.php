@@ -11,7 +11,7 @@ final class WebEvents
      * This event allows you to create a response for a request before any
      * other code in the framework is executed.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseEvent")
+     * @Event("Codeages\PhalconBiz\Event\GetResponseEvent")
      *
      * @var string
      */
@@ -23,7 +23,7 @@ final class WebEvents
      * This event allows you to create a response for a thrown exception or
      * to modify the thrown exception.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent")
+     * @Event("Codeages\PhalconBiz\Event\GetResponseForExceptionEvent")
      *
      * @var string
      */
@@ -36,7 +36,7 @@ final class WebEvents
      * This event allows you to create a response for the return value of the
      * controller.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent")
+     * @Event("Codeages\PhalconBiz\Event\GetResponseForControllerResultEvent")
      *
      * @var string
      */
@@ -49,32 +49,9 @@ final class WebEvents
      * This event allows you to modify or replace the response that will be
      * replied.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\FilterResponseEvent")
+     * @Event("Codeages\PhalconBiz\Event\FilterResponseEvent")
      *
      * @var string
      */
     const RESPONSE = 'web.response';
-
-    /**
-     * The TERMINATE event occurs once a response was sent.
-     *
-     * This event allows you to run expensive post-response jobs.
-     *
-     * @Event("Symfony\Component\HttpKernel\Event\PostResponseEvent")
-     *
-     * @var string
-     */
-    const TERMINATE = 'web.terminate';
-
-    /**
-     * The FINISH_REQUEST event occurs when a response was generated for a request.
-     *
-     * This event allows you to reset the global and environmental state of
-     * the application, when it was changed during the request.
-     *
-     * @Event("Symfony\Component\HttpKernel\Event\FinishRequestEvent")
-     *
-     * @var string
-     */
-    const FINISH_REQUEST = 'web.finish_request';
 }
