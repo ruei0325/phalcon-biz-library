@@ -16,8 +16,15 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         $response = $event->getDI()->get('response');
         $response->setStatusCode(200);
-        $response->setContentType('application/json', 'UTF-8');
-        $response->setContent(json_encode($result));
+
+        $callback = $event->getRequest()->getQuery('callback', 'string');
+        // jsonp
+        if ($callback) {
+            $response->setContent(sprintf("%s(%s);", $callback, json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)));
+        } else {
+            $response->setContentType('application/json', 'UTF-8');
+            $response->setContent(json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        }
 
         $event->setResponse($response);
     }
