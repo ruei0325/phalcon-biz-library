@@ -64,7 +64,7 @@ class AnnotationRouteDiscovery
      */
     protected function getRoutesFromCache($namespace, $directory)
     {
-        $cachePath = sprintf('%s/%s_routes.php', $this->cacheDirectory, strtolower($namespace));
+        $cachePath = sprintf('%s/%s__routes.php', $this->cacheDirectory, str_replace('\\', '_', strtolower($namespace)));
 
         if (file_exists($cachePath)) {
             return require $cachePath;
