@@ -76,7 +76,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             'message' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
-            'trace' => $e->getTrace(),
+            'trace' => $e->getTraceAsString(), // 这里本来是$e->getTrace()，但当异常的堆栈中包含特殊字符时，调用 getTrace() 这个函数会触发PHP内核崩溃，页面500啥都不输出。
         ];
 
         if ($e->getPrevious()) {
