@@ -19,6 +19,19 @@ class ApiAuthenticateSubscriber implements EventSubscriberInterface
 
     public function authenticate(RequestInterface $request, UserProvider $userProvider)
     {
+        list($strategy, $token) = $this->parseAuthorizationHeader($request);
+
+        if ('secret' == $strategy) {
+            return $this->authenticateUseSecret($token, $request, $userProvider);
+        } elseif ('signature' == $strategy) {
+            return $this->authenticateUseSignature($token, $request, $userProvider);
+        } else {
+            throw new AuthenticateException('Authorization token is invalid.', ErrorCode::INVALID_AUTHENTICATION);
+        }
+    }
+
+    protected function parseAuthorizationHeader(RequestInterface $request)
+    {
         $token = $request->getHeader('Authorization');
         if (empty($token)) {
             throw new AuthenticateException('Authorization token is missing.', ErrorCode::INVALID_AUTHENTICATION);
@@ -30,15 +43,9 @@ class ApiAuthenticateSubscriber implements EventSubscriberInterface
         }
 
         list($strategy, $token) = $token;
-
         $strategy = strtolower($strategy);
-        if ('secret' == $strategy) {
-            return $this->authenticateUseSecret($token, $request, $userProvider);
-        } elseif ('signature' == $strategy) {
-            return $this->authenticateUseSignature($token, $request, $userProvider);
-        } else {
-            throw new AuthenticateException('Authorization token is invalid.', ErrorCode::INVALID_AUTHENTICATION);
-        }
+
+        return [$strategy, $token];
     }
 
     protected function authenticateUseSecret($token, $request, UserProvider $userProvider)
@@ -66,15 +73,15 @@ class ApiAuthenticateSubscriber implements EventSubscriberInterface
         }
         list($accessKey, $deadline, $once, $signature) = $token;
 
-        $user = $this->getUser($accessKey, $request, $userProvider);
 
         if ($deadline < time()) {
             throw new AuthenticateException('Authorization token is expired.', ErrorCode::INVALID_AUTHENTICATION);
         }
 
+        $user = $this->getUser($accessKey, $request, $userProvider);
         $signingText = "{$once}\n{$deadline}\n{$request->getURI()}\n{$request->getRawBody()}";
 
-        if ($this->signature($signingText, $user['secret_key']) != $signature) {
+        if ($this->signature($signingText, $user) != $signature) {
             throw new AuthenticateException('Signature is invalid.', ErrorCode::INVALID_AUTHENTICATION);
         }
 
@@ -103,9 +110,9 @@ class ApiAuthenticateSubscriber implements EventSubscriberInterface
         return $user;
     }
 
-    public function signature($signingText, $secretKey)
+    public function signature($signingText, $user)
     {
-        $signature = hash_hmac('sha1', $signingText, $secretKey, true);
+        $signature = hash_hmac('sha1', $signingText, $user['secret_key'], true);
 
         return  str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
     }
