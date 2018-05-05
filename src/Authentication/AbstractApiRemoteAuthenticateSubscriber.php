@@ -11,6 +11,10 @@ use Codeages\PhalconBiz\ErrorCode;
 abstract class AbstractApiRemoteAuthenticateSubscriber extends ApiAuthenticateSubscriber
 {
     /**
+     * @var GetResponseEvent
+     */
+    protected $event;
+    /**
      * 调用远程接口签名
      *
      * @param string $signingText
@@ -21,6 +25,7 @@ abstract class AbstractApiRemoteAuthenticateSubscriber extends ApiAuthenticateSu
 
     public function onRequest(GetResponseEvent $event)
     {
+        $this->event = $event;
         $di = $event->getDI();
         $user = $this->authenticateRemotely($event->getRequest());
         $di['user'] = $di['biz']['user'] = $user;
