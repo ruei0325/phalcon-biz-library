@@ -2,20 +2,20 @@
 
 use PHPUnit\Framework\TestCase;
 use Codeages\PhalconBiz\Authentication\ApiUser;
-use Codeages\PhalconBiz\Authentication\ApiAuthenticateSubscriber;
+use Codeages\PhalconBiz\Authentication\AbstractApiRemoteAuthenticateSubscriber;
 use Phalcon\Http\Request;
 use Codeages\PhalconBiz\Authentication\UserProvider;
 use Phalcon\Http\RequestInterface;
 use Codeages\Biz\Framework\Context\CurrentUser;
 
-class ApiAuthenticateSubscriberTest extends TestCase
+class ApiRemoteAuthenticateSubscriberTest extends TestCase
 {
     public function testAuthenticate()
     {
-        $userProvider = new class implements UserProvider {
-            public function loadUser($identifier, RequestInterface $request)
+        $subsciber = new class extends AbstractApiRemoteAuthenticateSubscriber {
+            public function signatureRemotely($signingText, $accessKey)
             {
-                return new ApiUser([
+                $user = new ApiUser([
                     'id' => 1,
                     'username' => 'testuser',
                     'access_key' => 'test_access_key',
@@ -23,22 +23,21 @@ class ApiAuthenticateSubscriberTest extends TestCase
                     'login_client' => 'test_client',
                     'login_ip' => '127.0.0.1',
                 ]);
+
+                return ['test_signuature', $user];
             }
         };
         
+        $request = new Request();
         $token = [
             'test_access_key',
             time() + 60,
             'test_once',
+            'test_signuature'
         ];
-
-        $request = new Request();
-        $subsciber = new ApiAuthenticateSubscriber();
-        $signingText = "{$token[2]}\n{$token[1]}\n{$request->getURI()}\n{$request->getRawBody()}";
-        $token[] = $subsciber->signature($signingText, $userProvider->loadUser($token[0], $request));
         $_SERVER['HTTP_AUTHORIZATION'] = 'Signature '.implode(':', $token);
 
-        $user = $subsciber->authenticate($request, $userProvider);
+        $user = $subsciber->authenticateRemotely($request);
 
         $this->assertEquals(1, $user['id']);
         $this->assertEquals('test_access_key', $user['access_key']);
