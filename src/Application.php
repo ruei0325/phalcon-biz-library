@@ -188,7 +188,7 @@ class Application
         $router->handle();
 
         if (!$router->getMatchedRoute()) {
-            throw new NotFoundException();
+            throw new NotFoundException("URI {$request->getURI()} is not found.");
         }
 
         $dispatcher = $this->di['mvc_dispatcher'];
