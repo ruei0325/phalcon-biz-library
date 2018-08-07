@@ -2,8 +2,6 @@
 
 namespace Codeages\PhalconBiz\Authentication;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\PhalconBiz\Event\WebEvents;
 use Codeages\PhalconBiz\Event\GetResponseEvent;
 use Phalcon\Http\RequestInterface;
 use Codeages\PhalconBiz\ErrorCode;
@@ -14,11 +12,13 @@ abstract class AbstractApiRemoteAuthenticateSubscriber extends ApiAuthenticateSu
      * @var GetResponseEvent
      */
     protected $event;
+
     /**
      * 调用远程接口签名
      *
      * @param string $signingText
      * @param string $accessKey
+     *
      * @return array array[0] signuature, array[1]: ApiUser
      */
     abstract public function signatureRemotely($signingText, $accessKey);

@@ -148,8 +148,9 @@ trait ControllerTrait
     /**
      * 重定向
      *
-     * @param [type] $url 重定向的目标 URL
-     * @param integer $statusCode 重定向的 HTTP 状态码，默认为 301
+     * @param [type] $url        重定向的目标 URL
+     * @param int    $statusCode 重定向的 HTTP 状态码，默认为 301
+     *
      * @return Phalcon\Http\ResponseInterface
      */
     protected function redirect($url, $statusCode = 301)

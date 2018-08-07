@@ -178,7 +178,7 @@ class Application
 
         $discovery = new AnnotationRouteDiscovery($router, $this->di['annotations'], $this->biz['cache_directory'], $this->debug);
         if (empty($this->config['route_discovery']) || !is_array($this->config['route_discovery'])) {
-            throw new \RuntimeException("`route_discovery`未配置或配置不正确。");
+            throw new \RuntimeException('`route_discovery`未配置或配置不正确。');
         }
 
         foreach ($this->config['route_discovery'] as $namespace => $directory) {
@@ -188,7 +188,7 @@ class Application
         $router->handle();
 
         if (!$router->getMatchedRoute()) {
-            throw new NotFoundException("URI {$request->getURI()} is not found.");
+            throw new NotFoundException("No route found for '{$request->getMethod()} {$request->getURI()}'.");
         }
 
         $dispatcher = $this->di['mvc_dispatcher'];

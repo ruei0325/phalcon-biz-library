@@ -6,13 +6,12 @@ use Codeages\PhalconBiz\Authentication\ApiAuthenticateSubscriber;
 use Phalcon\Http\Request;
 use Codeages\PhalconBiz\Authentication\UserProvider;
 use Phalcon\Http\RequestInterface;
-use Codeages\Biz\Framework\Context\CurrentUser;
 
 class ApiAuthenticateSubscriberTest extends TestCase
 {
     public function testAuthenticate()
     {
-        $userProvider = new class implements UserProvider {
+        $userProvider = new class() implements UserProvider {
             public function loadUser($identifier, RequestInterface $request)
             {
                 return new ApiUser([
@@ -25,7 +24,7 @@ class ApiAuthenticateSubscriberTest extends TestCase
                 ]);
             }
         };
-        
+
         $token = [
             'test_access_key',
             time() + 60,

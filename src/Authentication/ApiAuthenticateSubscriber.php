@@ -73,7 +73,6 @@ class ApiAuthenticateSubscriber implements EventSubscriberInterface
         }
         list($accessKey, $deadline, $once, $signature) = $token;
 
-
         if ($deadline < time()) {
             throw new AuthenticateException('Authorization token is expired.', ErrorCode::INVALID_AUTHENTICATION);
         }

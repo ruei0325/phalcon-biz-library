@@ -4,15 +4,12 @@ use PHPUnit\Framework\TestCase;
 use Codeages\PhalconBiz\Authentication\ApiUser;
 use Codeages\PhalconBiz\Authentication\AbstractApiRemoteAuthenticateSubscriber;
 use Phalcon\Http\Request;
-use Codeages\PhalconBiz\Authentication\UserProvider;
-use Phalcon\Http\RequestInterface;
-use Codeages\Biz\Framework\Context\CurrentUser;
 
 class ApiRemoteAuthenticateSubscriberTest extends TestCase
 {
     public function testAuthenticate()
     {
-        $subsciber = new class extends AbstractApiRemoteAuthenticateSubscriber {
+        $subsciber = new class() extends AbstractApiRemoteAuthenticateSubscriber {
             public function signatureRemotely($signingText, $accessKey)
             {
                 $user = new ApiUser([
@@ -27,13 +24,13 @@ class ApiRemoteAuthenticateSubscriberTest extends TestCase
                 return ['test_signuature', $user];
             }
         };
-        
+
         $request = new Request();
         $token = [
             'test_access_key',
             time() + 60,
             'test_once',
-            'test_signuature'
+            'test_signuature',
         ];
         $_SERVER['HTTP_AUTHORIZATION'] = 'Signature '.implode(':', $token);
 
