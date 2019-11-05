@@ -10,8 +10,7 @@
     "require": {
         "php": "^5.5|^7.0",
         "ext-phalcon": "*",
-        "codeages/biz-framework": "^0.10.0",
-        "particle/validator": "^2.3.2"
+        "codeages/biz-framework": "^0.10.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5|^6",
