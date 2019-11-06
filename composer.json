@@ -1,6 +1,7 @@
 {
     "name": "codeages/phalcon-biz-library",
     "description": "Phalcon 与 BizFramework 整合的类库，比较适用与 API 项目。",
+    "license": "MIT",
     "type": "library",
     "autoload": {
         "psr-4": {
