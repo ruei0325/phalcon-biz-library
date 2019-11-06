@@ -11,7 +11,7 @@ trait JsonRpcClientTrait
     protected $biz;
 
     /**
-     * @return \App\JsonRpcClient
+     * @return JsonRpcClient
      */
     private function rpc()
     {
