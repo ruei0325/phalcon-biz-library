@@ -41,6 +41,8 @@ class JsonRpcClient
 
         if (isset($endpoint['trace_id'])) {
             $addr = $endpoint['addr'] . (strpos($endpoint['addr'], '?') === false ? '?' : '&') . 'trace_id=' . $endpoint['trace_id'];
+        } else {
+            $addr = $endpoint['addr'];
         }
 
         if (empty($endpoint['auth_type'])) {
