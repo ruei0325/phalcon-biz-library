@@ -39,10 +39,8 @@ class JsonRpcClient
 
         $protocol->query($this->makeId(), $method, $args);
 
-        if (isset($endpoint['trace_id'])) {
-            $addr = $endpoint['addr'] . (strpos($endpoint['addr'], '?') === false ? '?' : '&') . 'trace_id=' . $endpoint['trace_id'];
-        } else {
-            $addr = $endpoint['addr'];
+        if (empty($endpoint['addr'])) {
+            throw new JsonRpcException("Endpoint addr is missing.");
         }
 
         if (empty($endpoint['auth_type'])) {
@@ -66,6 +64,14 @@ class JsonRpcClient
 
         $headers['Authorization'] = sprintf('Basic %s', base64_encode("{$endpoint['auth_credentials']['username']}:{$endpoint['auth_credentials']['password']}"));
         $headers['JsonRpc-Context'] = !empty($endpoint['context']) ? http_build_query($endpoint['context']) : '';
+        if (!empty($endpoint['context'])) {
+            $headers['JsonRpc-Context'] = http_build_query($endpoint['context']);
+        }
+
+        $addr = $endpoint['addr'];
+        if (!empty($endpoint['context']['trace_id'])) {
+            $addr = $endpoint['addr'] . (strpos($endpoint['addr'], '?') === false ? '?' : '&') . 'trace_id=' . $endpoint['context']['trace_id'];
+        }
 
         try {
             $response = $http->request('POST', $addr, [
@@ -111,7 +117,7 @@ class JsonRpcClient
 
     private function makeId()
     {
-        return 1;
+        return sprintf("%f_%d", microtime(true), rand(1000000000, 9999999999));
     }
 
     private function getProtocol()
