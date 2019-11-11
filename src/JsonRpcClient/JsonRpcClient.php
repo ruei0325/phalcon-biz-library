@@ -39,12 +39,36 @@ class JsonRpcClient
 
         $protocol->query($this->makeId(), $method, $args);
 
+        if (isset($endpoint['trace_id'])) {
+            $addr = $endpoint['addr'] . (strpos($endpoint['addr'], '?') === false ? '?' : '&') . 'trace_id=' . $endpoint['trace_id'];
+        }
+
+        if (empty($endpoint['auth_type'])) {
+            throw new JsonRpcException("Endpoint auth_type is missing.");
+        }
+        if (!in_array($endpoint['auth_type'], ['basic'])) {
+            throw new JsonRpcException("Endpoint auth_type is not supported.");
+        }
+
+        if (empty($endpoint['auth_credentials'])) {
+            throw new JsonRpcException("Endpoint auth_credentials is missing.");
+        }
+
+        if (empty($endpoint['auth_credentials']['username']) || empty($endpoint['auth_credentials']['password'])) {
+            throw new JsonRpcException("Endpoint auth_credentials.username or auth_credentials.password is missing.");
+        }
+
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+
+        $headers['Authorization'] = sprintf('Basic %s', base64_encode("{$endpoint['auth_credentials']['username']}:{$endpoint['auth_credentials']['password']}"));
+        $headers['JsonRpc-Context'] = !empty($endpoint['context']) ? http_build_query($endpoint['context']) : '';
+
         try {
-            $response = $http->request('POST', $endpoint, [
+            $response = $http->request('POST', $addr, [
                 'timeout' => $this->options['timeout'],
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ],
+                'headers' => $headers,
                 'body' => $protocol->encode(),
             ]);
             $content = $response->getContent();
