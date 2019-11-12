@@ -19,7 +19,7 @@ class JsonRpcClient
     public function __construct(array $options = [])
     {
         $this->options = array_merge([
-            'timeout' =>  1,
+            'timeout' =>  60,
         ], $options);
     }
 
@@ -60,6 +60,7 @@ class JsonRpcClient
 
         $headers = [
             'Content-Type' => 'application/json',
+            'User-Agent' => 'CodeAges JsonRpc Client 1.0.0',
         ];
 
         $headers['Authorization'] = sprintf('Basic %s', base64_encode("{$endpoint['auth_credentials']['username']}:{$endpoint['auth_credentials']['password']}"));
