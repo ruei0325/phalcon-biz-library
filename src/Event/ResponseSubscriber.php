@@ -20,6 +20,7 @@ class ResponseSubscriber implements EventSubscriberInterface
         $callback = $event->getRequest()->getQuery('callback', 'string');
         // jsonp
         if ($callback) {
+            $response->setContentType('text/html', 'UTF-8');
             $response->setContent(sprintf('%s(%s);', $callback, json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)));
         } else {
             $response->setContentType('application/json', 'UTF-8');

@@ -63,11 +63,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
 
         $response = $event->getDI()->get('response');
-        $response->setStatusCode($statusCode);
-        $response->setContentType('application/json', 'UTF-8');
-        $response->setContent(json_encode([
-            'error' => $error,
-        ]));
+        $callback = $event->getRequest()->getQuery('callback', 'string');
+        //jsonp
+        if ($callback) {
+            $response->setStatusCode(200);
+            $response->setContentType('text/html', 'UTF-8');
+            $response->setContent(sprintf("%s(%s);", $callback, json_encode($error, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)));
+        } else {
+            $response->setStatusCode($statusCode);
+            $response->setContentType('application/json', 'UTF-8');
+            $response->setContent(json_encode(['error' => $error], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        }
 
         $event->setResponse($response);
     }
