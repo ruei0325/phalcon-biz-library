@@ -11,9 +11,7 @@
     "require": {
         "php": "^5.5|^7.0",
         "ext-phalcon": "*",
-        "codeages/biz-framework": "^0.10.0",
-        "datto/json-rpc": "^6.0",
-        "symfony/http-client": "^4.3"
+        "codeages/biz-framework": "^0.10.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5|^6",
