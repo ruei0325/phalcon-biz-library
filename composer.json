@@ -11,7 +11,7 @@
     "require": {
         "php": "^5.5|^7.0",
         "ext-phalcon": "*",
-        "codeages/biz-framework": "^0.10.0"
+        "codeages/biz-framework": "^0.10.0|dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^5|^6",
